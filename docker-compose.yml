@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  dashboard:
+    image: python:3.11-slim
+    container_name: xapi-dashboard
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8501:8501"
+    environment:
+      - LRS_ENDPOINT=${LRS_ENDPOINT:-}
+      - LRS_USERNAME=${LRS_USERNAME:-}
+      - LRS_PASSWORD=${LRS_PASSWORD:-}
+      - LRS_TOKEN=${LRS_TOKEN:-}
+    command: >
+      sh -c "pip install -r requirements.txt --quiet &&
+             streamlit run frontend/app.py
+             --server.port=8501
+             --server.address=0.0.0.0
+             --server.headless=true
+             --theme.base=dark
+             --theme.backgroundColor='#0A0C14'
+             --theme.secondaryBackgroundColor='#12172A'
+             --theme.textColor='#E8EAF6'
+             --theme.primaryColor='#4F8EF7'"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

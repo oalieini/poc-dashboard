@@ -1,0 +1,123 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Streamlit
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Credentials (IMPORTANT!)
+credentials.yaml
+config/credentials.yaml
+secrets.toml
+*.key
+*.pem
+
+# Data files (don't commit actual learning data)
+data/
+*.csv
+*.json
+*.xlsx
+*.xls
+statements.json
+raw_data/
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Backup files
+*.bak
+*.backup
+*_backup.py
+*_old.py
+
+# IDE
+*.sublime-project
+*.sublime-workspace
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Profiling
+*.prof

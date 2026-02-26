@@ -1,0 +1,200 @@
+indicators:
+
+  # ─────────────────────────────────────────────
+  # ENGAGEMENT
+  # ─────────────────────────────────────────────
+  engagement:
+    label: "Engagement"
+    color: "#4F8EF7"
+    indicators:
+      active_learners:
+        label: "Active Learners"
+        description: "Unique actors who sent at least one statement in the period"
+        unit: "learners"
+        xapi_verb: null
+        formula: "COUNT(DISTINCT actor.account.name) WHERE timestamp IN period"
+        chart: "line"
+        trend: true
+
+      total_statements:
+        label: "Total Statements"
+        description: "Total xAPI statements recorded in the period"
+        unit: "statements"
+        xapi_verb: null
+        formula: "COUNT(*) WHERE timestamp IN period"
+        chart: "bar"
+        trend: true
+
+      sessions:
+        label: "Learning Sessions"
+        description: "Number of distinct learning sessions"
+        unit: "sessions"
+        xapi_verb: null
+        formula: "GROUP sessions by actor"
+        chart: "bar"
+        trend: true
+
+      avg_session_duration:
+        label: "Avg Session Duration"
+        description: "Average time between first and last statement per session"
+        unit: "minutes"
+        xapi_verb: null
+        formula: "MEAN(last_stmt_ts - first_stmt_ts) per session"
+        chart: "line"
+        trend: true
+
+      daily_active_rate:
+        label: "Daily Active Rate"
+        description: "Percentage of enrolled learners active on a given day"
+        unit: "%"
+        xapi_verb: null
+        formula: "active_learners_day / total_enrolled * 100"
+        chart: "line"
+        trend: true
+
+      statements_per_learner:
+        label: "Statements per Learner"
+        description: "Average number of statements per active learner"
+        unit: "stmt/learner"
+        xapi_verb: null
+        formula: "total_statements / active_learners"
+        chart: "bar"
+        trend: true
+      resume_rate:
+        label: "Resume Rate"
+        description: "% of suspended activities that were resumed"
+        unit: "%"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/resumed"
+        formula: "COUNT(resumed) / COUNT(suspended) * 100"
+        chart: "gauge"
+        trend: true
+
+      avg_progress_at_suspension:
+        label: "Avg Progress at Suspension"
+        description: "Average progress percentage when students pause"
+        unit: "%"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/suspended"
+        formula: "MEAN(result.extensions.progress) WHERE verb = suspended"
+        chart: "line"
+        trend: true
+
+  performance:
+    label: "Performance"
+    color: "#F59E0B"
+    indicators:
+      avg_score:
+        label: "Average Score"
+        description: "Mean normalized score across all scored activities"
+        unit: "/ 100"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/answered"
+        formula: "MEAN(result.score.scaled * 100) WHERE verb=answered"
+        chart: "line"
+        trend: true
+
+      pass_rate:
+        label: "Pass Rate"
+        description: "Percentage of assessments passed"
+        unit: "%"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/passed"
+        formula: "COUNT(passed) / (COUNT(passed) + COUNT(failed)) * 100"
+        chart: "gauge"
+        trend: true
+
+
+      score_distribution:
+        label: "Score Distribution"
+        description: "Distribution of normalized scores (0–100)"
+        unit: "learners"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/answered"
+        formula: "HISTOGRAM(result.score.scaled * 100)"
+        chart: "histogram"
+        trend: false
+
+      completion_rate:
+        label: "Completion Rate"
+        description: "Percentage of started activities that were completed"
+        unit: "%"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/completed"
+        formula: "COUNT(completed) / COUNT(attempted) * 100"
+        chart: "gauge"
+        trend: true
+
+  # ─────────────────────────────────────────────
+  # INTERACTION & BEHAVIOR
+  # ─────────────────────────────────────────────
+  interaction:
+    label: "Interaction"
+    color: "#A855F7"
+    indicators:
+
+      experienced_count:
+        label: "Experienced Events"
+        description: "Total experienced statements (content viewed)"
+        unit: "events"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/experienced"
+        formula: "COUNT(*) WHERE verb=experienced"
+        chart: "bar"
+        trend: true
+
+      verb_distribution:
+        label: "Verb Distribution"
+        description: "Breakdown of statement counts by xAPI verb"
+        unit: "statements"
+        xapi_verb: null
+        formula: "GROUP BY verb.id → COUNT(*)"
+        chart: "pie"
+        trend: false
+
+      most_active_hours:
+        label: "Peak Activity Hours"
+        description: "Hour-of-day distribution of all statements"
+        unit: "statements"
+        xapi_verb: null
+        formula: "GROUP BY HOUR(timestamp) → COUNT(*)"
+        chart: "heatmap"
+        trend: false
+
+
+  # ─────────────────────────────────────────────
+  # CONTENT ANALYTICS
+  # ─────────────────────────────────────────────
+  content:
+    label: "Content Analytics"
+    color: "#F97316"
+    indicators:
+      top_activities:
+        label: "Top Activities"
+        description: "Most accessed learning objects by statement count"
+        unit: "statements"
+        xapi_verb: null
+        formula: "GROUP BY activity.id → COUNT(*) ORDER BY DESC LIMIT 10"
+        chart: "bar"
+        trend: false
+
+      avg_time_per_activity:
+        label: "Avg Time per Activity"
+        description: "Mean result.duration per activity"
+        unit: "minutes"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/completed"
+        formula: "MEAN(result.duration) GROUP BY activity.id"
+        chart: "bar"
+        trend: false
+
+
+      content_dropout_map:
+        label: "Dropout by Activity"
+        description: "Activities with highest dropout (started but not completed)"
+        unit: "learners"
+        xapi_verb: null
+        formula: "COUNT(launched) - COUNT(completed) GROUP BY activity.id"
+        chart: "bar"
+        trend: false
+
+      interaction_type_performance:
+        label: "Performance by Question Type"
+        description: "Success rate by interaction type (choice, sequencing, etc)"
+        unit: "types"
+        xapi_verb: "http://adlnet.gov/expapi/verbs/answered"
+        formula: "MEAN(result.success) * 100 GROUP BY object.definition.interactionType"
+        chart: "bar"
+        trend: false
