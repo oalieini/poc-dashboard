@@ -167,9 +167,8 @@ with st.sidebar:
         )
         auth_method = st.radio("Auth Method", ["Basic Auth", "Bearer Token"], horizontal=True)
         if auth_method == "Basic Auth":
-            lrs_username = st.text_input("Username", value=os.getenv("LRS_USERNAME", "Default"))
-            lrs_password = st.text_input("Password", type="password", value=os.getenv("LRS_PASSWORD",
-                                                                                      "Causation-Maternal-Hacker-Dreamily-Buffer-Showpiece7"))
+            lrs_username = st.text_input("Username", value=os.getenv("LRS_USERNAME"))
+            lrs_password = st.text_input("Password", type="password", value=os.getenv("LRS_PASSWORD"))
             lrs_token = ""
         else:
             lrs_token = st.text_input("Bearer Token", type="password", value=os.getenv("LRS_TOKEN", ""))
